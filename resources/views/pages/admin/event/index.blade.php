@@ -57,6 +57,7 @@
                                     <thead>
                                         <tr>
                                             <th>Nama</th>
+                                            <th>Priode</th>
                                             <th>Deskripsi</th>
                                             <th>Poin</th>
                                             <th>Waktu</th>
@@ -69,6 +70,7 @@
                                         @forelse ($events as $item)
                                         <tr>
                                              <td>{{$item->name}}</td>
+                                             <td>{{$item->priode}}</td>
                                              <td>{{strip_tags($item->description)}}</td>
                                              <td>
                                                {{$item->point}}

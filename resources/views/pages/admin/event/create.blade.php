@@ -31,7 +31,7 @@
                     @csrf
                     <div class="card-body">
                         <div class="row">
-                            <div class="form-group col-4">
+                            <div class="form-group col-3">
                                 <label>Nama</label>
                                 <input type="text"
                                     class="form-control @error('name')
@@ -44,7 +44,20 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group col-4">
+                            <div class="form-group col-3">
+                                <label>Priode</label>
+                                <input type="text"
+                                    class="form-control @error('priode')
+                                is-invalid
+                            @enderror"
+                                    name="priode">
+                                @error('priode')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-3">
                                 <label>Tanggal</label>
                                 <input type="date"
                                     class="form-control @error('date')
@@ -57,7 +70,7 @@
                                     </div>
                                 @enderror
                             </div>
-                            <div class="form-group col-4">
+                            <div class="form-group col-3">
                                 <label>Poin</label>
                                 <input type="number"
                                     class="form-control @error('point')

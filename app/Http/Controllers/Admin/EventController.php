@@ -35,7 +35,8 @@ class EventController extends Controller
             'name' => 'required',
             'description' => 'required',
             'date' => 'required',
-            'point' => 'required'
+            'point' => 'required',
+            'priode' => 'required',
         ]);
 
         Event::create($validated);
@@ -49,7 +50,10 @@ class EventController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $event = Event::findorfail($id);
+        $users = $event->rsvp;
+
+        return view('pages.admin.event.show', compact('event','users'));
     }
 
     /**

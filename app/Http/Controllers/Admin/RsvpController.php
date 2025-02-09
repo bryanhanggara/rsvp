@@ -16,7 +16,7 @@ class RsvpController extends Controller
     {
         $validated = $request->validate([
             'event_id' => 'required|exists:events,id',
-            'image' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            'image' => 'required|image|mimes:jpg,png,jpeg|max:10240',
         ]);
 
         $event = Event::find($request->event_id);
@@ -38,24 +38,96 @@ class RsvpController extends Controller
             'status' => 'PENDING',
         ]);
 
-        //mengecek user dah ada user_point di priode acara ini 
-        $userPoint = UserPoint::where('user_id', $user->id)
-                          ->where('periode', $event->periode)
-                          ->first();
+        // //mengecek user dah ada user_point di priode acara ini 
+        // $userPoint = UserPoint::where('user_id', $user->id)
+        //                   ->where('periode', $event->priode)
+        //                   ->first();
 
-        if ($userPoint) {
-        // Jika user_point sudah ada di periode ini, update point
-        $userPoint->increment('point', $event->point);
-        } else {
-            // Jika periode baru, buat user_point baru
-            UserPoint::create([
-                'user_id' => $user->id,
-                'periode' => $event->periode,
-                'point' => $event->point,
-            ]);
-        }
+        // if ($userPoint) {
+        // // Jika user_point sudah ada di periode ini, update point
+        // $userPoint->increment('point', $event->point);
+        // } else {
+        //     // Jika periode baru, buat user_point baru
+        //     UserPoint::create([
+        //         'user_id' => $user->id,
+        //         'periode' => $event->priode,
+        //         'point' => $event->point,
+        //     ]);
+        // }
 
         Alert::success('Yeay', 'Berhasil rsvp acara ini, Mohon tunggu verifikasi internal ya');
         return redirect()->back();
     }
+
+    public function updateStatus(Request $request, $id)
+    {
+        $rsvp = Rsvp::findOrFail($id);
+        $event = $rsvp->event;
+        $user = $rsvp->user;
+
+        $rsvp->update(['status' => $request->status]);
+
+         // Jika status diubah menjadi APPROVED, tambahkan poin ke UserPoint
+        if ($request->status === 'APPROVED') {
+            $userPoint = UserPoint::where('user_id', $user->id)
+                                ->where('periode', $event->priode)
+                                ->first();
+
+            if ($userPoint) {
+                // Update poin jika sudah ada
+                $userPoint->increment('point', $event->point);
+            } else {
+                // Buat record baru jika belum ada
+                UserPoint::create([
+                    'user_id' => $user->id,
+                    'periode' => $event->priode,
+                    'point' => $event->point,
+                ]);
+            }
+        }
+
+        Alert::success('Berhasil', 'Status RSVP berhasil diperbarui');
+        return redirect()->back();
+    }
+
+    public function bulkUpdateStatus(Request $request)
+    {
+        $request->validate([
+            'rsvp_ids' => 'required|array',
+            'rsvp_ids.*' => 'exists:rsvps,id',
+            'status' => 'required|in:PENDING,APPROVED,REJECTED',
+        ]);
+
+        $rsvps = Rsvp::whereIn('id', $request->rsvp_ids)->get();
+
+        foreach ($rsvps as $rsvp) {
+            $rsvp->update(['status' => $request->status]);
+
+            // Jika status berubah menjadi APPROVED, tambahkan poin ke UserPoint
+            if ($request->status === 'APPROVED') {
+                $event = $rsvp->event;
+                $user = $rsvp->user;
+
+                $userPoint = UserPoint::where('user_id', $user->id)
+                                    ->where('periode', $event->priode)
+                                    ->first();
+
+                if ($userPoint) {
+                    // Update poin jika sudah ada
+                    $userPoint->increment('point', $event->point);
+                } else {
+                    // Buat record baru jika belum ada
+                    UserPoint::create([
+                        'user_id' => $user->id,
+                        'periode' => $event->priode,
+                        'point' => $event->point,
+                    ]);
+                }
+            }
+        }
+
+        Alert::success('Berhasil', 'Status RSVP berhasil diperbarui untuk beberapa pengguna');
+        return redirect()->back();
+    }
+
 }

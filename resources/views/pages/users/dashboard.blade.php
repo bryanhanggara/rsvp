@@ -11,7 +11,7 @@
     <style>
         .card-square {
             width: 200px;
-            height: 200px;
+            height: 100%;
             text-align: center;
         }
 
@@ -93,7 +93,34 @@
                     </div>
                 </div>
             </div>
-
+            <div class="section-header">
+                <h1>Acara Terbaru</h1>
+            </div>
+            <div class="row justify-center">
+                @forelse ($events as $item)
+                <div class="col-md-3">
+                    <a href="{{route('show.acara', $item->id)}}">
+                        <div class="card card-statistic-1 card-square">
+                            <div class="bg-primary d-flex justify-content-center align-items-center card-icon-circle mt-5">
+                                <i class="fa fa-bolt fa-2x text-white"></i>
+                            </div> 
+                            <div class="card-wrap">
+                                <div class="card-body">
+                                   <h3> {{$item->name}}</h3>
+                                   <p style="font-size: 16px;"> {{strip_tags($item->description)}}</p>
+                                   <p style="font-size: 16px;"> {{$item->date}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                @empty
+                    <div class="text-center p-5 justify-center d-flex">
+                        <i class="fa-solid fa-calendar-xmark fa-4x text-danger"></i>
+                        <h4 class="mt-3 text-muted">Belum ada acara</h4>
+                    </div>                              
+                @endforelse
+            </div>
         </section>
     </div>
 @endsection
