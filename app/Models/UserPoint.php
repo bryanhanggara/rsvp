@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Event extends Model
+class UserPoint extends Model
 {
     use HasFactory, HasUuids;
 
@@ -16,16 +16,11 @@ class Event extends Model
 
     protected $keyType = 'string';
 
-    protected $fillable = [
-      'name',
-      'description',
-      'date',
-      'point',
-      'priode'
-    ];
 
-    public function rsvp()
+    protected $fillable = ['user_id', 'periode', 'point'];
+
+    public function user()
     {
-        return $this->hasMany(Rsvp::class, 'event_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

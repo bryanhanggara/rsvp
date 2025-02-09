@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no"
         name="viewport">
-    <title>@yield('title') &mdash; Teman Laundri</title>
+    <title>@yield('title') &mdash; Beasiswa KSE Unsri</title>
     @livewireStyles
     <!-- General CSS Files -->
     <link rel="stylesheet"
@@ -47,17 +47,17 @@
             
             @include('sweetalert::alert')
             <!-- Header -->
-            @include('components.header')
+            @include('pages.users.components.header')
 
             <!-- Sidebar -->
-            @include('components.sidebar')
+            @include('pages.users.components.sidebar')
 
             <!-- Content -->
             @yield('main')
             
 
             <!-- Footer -->
-            @include('components.footer')
+            @include('pages.users.components.footer')
         </div>
     </div>
 

@@ -73,6 +73,10 @@ class EventController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $event = Event::findorfail($id);
+        $event->delete();
+
+        Alert::success('Yeay', 'Acara sudah dihapus');
+        return redirect()->back();
     }
 }

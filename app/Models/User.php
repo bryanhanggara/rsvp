@@ -28,6 +28,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'gen',
+        'departement',
+        'comdev',
+        'major',
+        'angkatan',
         'email',
         'password',
     ];
@@ -53,5 +58,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function rsvp()
+    {
+        return $this->hasMany(Rsvp::class,'user_id');
+    }
+
+    public function points()
+    {
+        return $this->hasMany(UserPoint::class, 'user_id');
     }
 }

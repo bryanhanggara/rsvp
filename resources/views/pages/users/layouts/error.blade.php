@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no"
         name="viewport">
-    <title>@yield('title') &mdash; Teman Laundri</title>
-    @livewireStyles
+    <title>@yield('title') &mdash; Stisla</title>
+
     <!-- General CSS Files -->
     <link rel="stylesheet"
         href="{{ asset('library/bootstrap/dist/css/bootstrap.min.css') }}">
@@ -37,31 +37,22 @@
 
         gtag('config', 'UA-94034622-3');
     </script>
-    <!-- END GA -->
-</head>
+    <!-- /END GA -->
 </head>
 
 <body>
     <div id="app">
-        <div class="main-wrapper">
-            
-            @include('sweetalert::alert')
-            <!-- Header -->
-            @include('components.header')
+        <section class="section">
+            <div class="container mt-5">
+                <!-- Content -->
+                @yield('main')
 
-            <!-- Sidebar -->
-            @include('components.sidebar')
-
-            <!-- Content -->
-            @yield('main')
-            
-
-            <!-- Footer -->
-            @include('components.footer')
-        </div>
+                <!-- Footer -->
+                @include('components.error-footer')
+            </div>
+        </section>
     </div>
 
-    @livewireScripts
     <!-- General JS Scripts -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('library/popper.js/dist/umd/popper.js') }}"></script>
@@ -76,6 +67,5 @@
     <!-- Template JS File -->
     <script src="{{ asset('js/scripts.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-</body>
 
 </html>

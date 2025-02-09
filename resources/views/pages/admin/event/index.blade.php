@@ -78,7 +78,7 @@
                                                 <a href="{{route('event.show', $item->id)}}" class="btn btn-success"><i class="fa fa-eye"></i></a>
                                                 <a href="" class="btn btn-warning"><i class="fa fa-pen"></i></a>
                                                 <a href="#" class="btn btn-danger" onclick="event.preventDefault(); document.getElementById('destroyForm').submit();"><i class="fa fa-trash"></i></a>
-                                                <form id="destroyForm" action="" method="post" style="display: none;">
+                                                <form id="destroyForm" action="{{route('event.destroy', $item->id)}}" method="post" style="display: none;">
                                                     @csrf
                                                     @method('delete')
                                                     <button type="submit"></button>
