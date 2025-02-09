@@ -13,22 +13,21 @@
                     class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
         </ul>
-        {{-- <ul class="sidebar-menu">
+        <ul class="sidebar-menu">
             <li class="menu-header">Layanan</li>
             <li class="nav-item">
-                <a href="{{route('customer.index')}}"
-                    class="nav-link"><i class="fas fa-user"></i><span>Pelanggan</span></a>
+                <a href="{{route('event.index')}}"
+                    class="nav-link"><i class="fas fa-user"></i><span>Acara</span></a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="{{route('package.index')}}"
                     class="nav-link"><i class="fa fa-shopping-cart"></i><span>Riwayat</span></a>
             </li>
             <li class="nav-item">
                 <a href="{{route('package.index')}}"
                     class="nav-link"><i class="fa fa-tshirt"></i><span>Paket Laundrian</span></a>
-            </li>
-        </ul> --}}
-
+            </li> --}}
+        </ul>
         <div class="hide-sidebar-mini mt-4 mb-4 p-3">
             <a href="https://getstisla.com/docs"
                 class="btn btn-primary btn-lg btn-block btn-icon-split">

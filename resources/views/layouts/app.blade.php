@@ -44,6 +44,7 @@
 <body>
     <div id="app">
         <div class="main-wrapper">
+            @include('sweetalert::alert')
             <!-- Header -->
             @include('components.header')
 
@@ -59,7 +60,7 @@
         </div>
     </div>
 
-    @livewireScripts
+    {{-- @livewireScripts --}}
     <!-- General JS Scripts -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('library/popper.js/dist/umd/popper.js') }}"></script>

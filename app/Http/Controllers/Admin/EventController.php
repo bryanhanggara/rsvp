@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class EventController extends Controller
 {
@@ -38,6 +40,7 @@ class EventController extends Controller
 
         Event::create($validated);
 
+        Alert::success('Yeay', 'Acara Sudah Dibuat');
         return redirect()->route('event.index');
     }
 
