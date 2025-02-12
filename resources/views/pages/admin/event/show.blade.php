@@ -57,7 +57,7 @@
                 </form>
             </div>
 
-            <!-- Form RSVP -->
+            <!-- RSVP -->
             <div class="card mt-4 p-3">
                 <form action="{{ route('rsvp.bulkUpdateStatus') }}" method="POST">
                     @csrf
@@ -79,7 +79,7 @@
                                 <th>Ubah Status</th>
                             </thead>
                             <tbody>
-                                @forelse ($users as $item)
+                                @forelse ($rsvps as $item)
                                     <tr>
                                         <td>
                                             <input type="checkbox" name="rsvp_ids[]" value="{{ $item->id }}" class="rsvp-checkbox">
@@ -105,6 +105,7 @@
                                                 <select name="status" class="form-control">
                                                     <option value="PENDING" {{ $item->status == 'PENDING' ? 'selected' : '' }}>PENDING</option>
                                                     <option value="APPROVED" {{ $item->status == 'APPROVED' ? 'selected' : '' }}>APPROVED</option>
+                                                    <option value="ABSENT" {{ $item->status == 'ABSENT' ? 'selected' : '' }}>ABSENT</option>
                                                     <option value="REJECTED" {{ $item->status == 'REJECTED' ? 'selected' : '' }}>REJECTED</option>
                                                 </select>
                                                 <button type="submit" class="btn btn-primary btn-sm mt-2">Update</button>
@@ -124,6 +125,7 @@
                                 <option value="" disabled selected>Pilih Status</option>
                                 <option value="PENDING">PENDING</option>
                                 <option value="APPROVED">APPROVED</option>
+                                <option value="ABSENT">ABSENT</option>
                                 <option value="REJECTED">REJECTED</option>
                             </select>
                             <button type="submit" class="btn btn-primary mt-2">Update Status Terpilih</button>
@@ -138,6 +140,40 @@
                     });
                 </script>
                 
+            </div>
+
+            <div class="card mt-4 p-3">
+                    <div class="card-header">
+                        <h4>Daftar Ketidakhadiran (TIDAK RSVP)</h4>
+                    </div>
+                    <div class="container-fluid">
+                        <table class="table table-striped">
+                            <thead>
+                                <th>Nomor</th>
+                                <th>Nama</th>
+                                <th>Kurangkan Poin</th>
+                            </thead>
+                            <tbody>
+                                @forelse ($usersWithoutRSVP  as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item->name }}</td>
+                                    
+                                        <td>
+                                            <form action="{{ route('event.deductPoints', ['eventId' => $event->id, 'userId' => $item->id]) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger mt-3">Kurangi Poin</button>
+                                            </form>
+                                            
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="text-center">Hadir Semua</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
             </div>
             
         </div>

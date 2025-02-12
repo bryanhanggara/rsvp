@@ -23,4 +23,9 @@ class UserPoint extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function histories()
+    {
+        return $this->hasMany(UserPointHistory::class);
+    }
 }

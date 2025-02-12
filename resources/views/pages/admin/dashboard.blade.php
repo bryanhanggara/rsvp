@@ -35,14 +35,14 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-primary">
-                            <i class="fa fa-shopping-basket fa-2x text-white"></i>
+                            <i class="fa fa-users fa-2x text-white"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Laundrian Hari ini</h4>
+                                <h4>Total Beswan</h4>
                             </div>
                             <div class="card-body">
-                                10
+                                {{$users_count}}
                             </div>
                         </div>
                     </div>
@@ -50,14 +50,14 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-success">
-                            <i class="fa fa-dollar-sign fa-2x text-white"></i>
+                            <i class="fa fa-calendar fa-2x text-white"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Pendapatan Hari ini</h4>
+                                <h4>Total Agenda Priode Ini</h4>
                             </div>
                             <div class="card-body">
-                                42
+                                {{$totalEvents}}
                             </div>
                         </div>
                     </div>
@@ -65,29 +65,14 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-warning">
-                            <i class="fa fa-spinner fa-2x text-white"></i>
+                            <i class="fa fa-calendar fa-2x text-white"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Sedang diproses</h4>
+                                <h4>Total Agenda</h4>
                             </div>
                             <div class="card-body">
-                                1,201
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-danger">
-                            <i class="fa fa-file-invoice-dollar fa-2x text-white"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Belum dibayar</h4>
-                            </div>
-                            <div class="card-body">
-                                47
+                                {{$events_count}}
                             </div>
                         </div>
                     </div>

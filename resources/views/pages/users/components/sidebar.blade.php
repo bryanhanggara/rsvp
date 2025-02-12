@@ -16,8 +16,8 @@
         <ul class="sidebar-menu">
             <li class="menu-header">Layanan</li>
             <li class="nav-item">
-                <a href="{{route('event.index')}}"
-                    class="nav-link"><i class="fas fa-user"></i><span>Riwayat RSPV</span></a>
+                <a href="{{route('show.history')}}"
+                    class="nav-link"><i class="fas fa-clock"></i><span>Riwayat RSPV</span></a>
             </li>
             {{-- <li class="nav-item">
                 <a href="{{route('package.index')}}"

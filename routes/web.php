@@ -17,6 +17,9 @@ Route::prefix('admin')->middleware('auth','isAdmin')->group(function(){
     Route::resource('/event', EventController::class);
     Route::put('/rsvp/updateStatus/{id}', [RsvpController::class, 'updateStatus'])->name('rsvp.updateStatus');
     Route::put('/rsvp/bulkUpdateStatus', [RsvpController::class, 'bulkUpdateStatus'])->name('rsvp.bulkUpdateStatus');
+    Route::post('/event/{eventId}/deduct-points/{userId}', [RsvpController::class, 'deductPointsForNonRsvp'])->name('event.deductPoints');
+    Route::get('/ranking', [HomeController::class, 'rankingBeswan'])->name('ranking.index');
+    Route::get('/points', [HomeController::class, 'pointsByMonth'])->name('admin.pointsByMonth');
 
 
 });
@@ -24,6 +27,7 @@ Route::prefix('admin')->middleware('auth','isAdmin')->group(function(){
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', [HomeUserController::class, 'index'])->name('dashboard.user');
     Route::get('/detail-acara/{eventId}', [HomeUserController::class, 'show'])->name('show.acara');
+    Route::get('/riwayat-rsvp', [HomeUserController::class, 'historyRsvp'])->name('show.history');
     Route::post('/rsvp', [RsvpController::class, 'store'])->name('rsvp');
 });
 

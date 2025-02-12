@@ -50,7 +50,7 @@
                                     class="form-control @error('priode')
                                 is-invalid
                             @enderror"
-                                    name="priode">
+                                    name="priode" value="{{ \App\Models\Event::getCurrentPeriod() }}" readonly>
                                 @error('priode')
                                     <div class="invalid-feedback">
                                         {{ $message }}

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignUuid('event_id')->constrained('events')->onDelete('cascade');
             $table->string('image');
-            $table->enum('status', ['PENDING','REJECTED','APPROVED'])->default('PENDING');
+            $table->enum('status', ['PENDING','REJECTED','APPROVED','ABSENT'])->default('PENDING');
             $table->timestamps();
         });
     }

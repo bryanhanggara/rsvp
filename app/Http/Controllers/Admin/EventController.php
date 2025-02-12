@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Rsvp;
+use App\Models\User;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,10 +14,15 @@ class EventController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::all();
-        return view('pages.admin.event.index', compact('events'));
+        $selectedPeriod = $request->input('priode', Event::getCurrentPeriod());
+
+        $availablePeriods = Event::select('priode')->distinct()->orderBy('priode', 'desc')->get();
+
+        $events = Event::where('priode', $selectedPeriod)->get();
+
+        return view('pages.admin.event.index', compact('events', 'availablePeriods', 'selectedPeriod'));
     }
 
     /**
@@ -39,7 +46,15 @@ class EventController extends Controller
             'priode' => 'required',
         ]);
 
-        Event::create($validated);
+        $periode = Event::getCurrentPeriod();
+
+         Event::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'date' => $request->date,
+            'point' => $request->point,
+            'priode' => $periode, // Otomatis ambil periode
+        ]);
 
         Alert::success('Yeay', 'Acara Sudah Dibuat');
         return redirect()->route('event.index');
@@ -51,9 +66,15 @@ class EventController extends Controller
     public function show(string $id)
     {
         $event = Event::findorfail($id);
-        $users = $event->rsvp;
+        $rsvps = $event->rsvp;
 
-        return view('pages.admin.event.show', compact('event','users'));
+        $allUsers = User::all();
+
+        $usersWhoRSVP = $rsvps->pluck('user_id')->toArray();
+
+        $usersWithoutRSVP = $allUsers->whereNotIn('id', $usersWhoRSVP);
+
+        return view('pages.admin.event.show', compact('event', 'rsvps', 'usersWithoutRSVP'));
     }
 
     /**

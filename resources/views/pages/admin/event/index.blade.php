@@ -43,13 +43,17 @@
                         
                         <div class="card-body">
                             
-                                {{-- <input class="form-control"
-                                name="name"
-                                type="search"
-                                placeholder="Search"
-                                aria-label="Search"
-                                data-width="250"
-                                wire:model.live="search"> --}}
+                            <form method="GET" action="{{ route('event.index') }}">
+                                <label for="priode">Filter Priode:</label>
+                                <select name="priode" id="priode" onchange="this.form.submit()" class="form-control">
+                                    @foreach ($availablePeriods as $period)
+                                        <option value="{{ $period->priode }}" {{ $period->priode == $selectedPeriod ? 'selected' : '' }}>
+                                            {{ $period->priode }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </form>
+
                             <br>
                             <div class="table-responsive">
                                 <table class="table-striped table"

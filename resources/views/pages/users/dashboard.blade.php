@@ -35,14 +35,14 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-primary">
-                            <i class="fa fa-shopping-basket fa-2x text-white"></i>
+                            <i class="fas fa-coins fa-2x text-white"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Laundrian Hari ini</h4>
+                                <h4>Total Point Kamu Priode Ini</h4>
                             </div>
                             <div class="card-body">
-                                10
+                                {{ auth()->user()->totalPointsForCurrentPeriod() }}
                             </div>
                         </div>
                     </div>
@@ -50,44 +50,29 @@
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
                         <div class="card-icon bg-success">
-                            <i class="fa fa-dollar-sign fa-2x text-white"></i>
+                            <i class="fa fa-calendar fa-2x text-white"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Pendapatan Hari ini</h4>
+                                <h4>Total Kegiatan Yang diikuti Priode Ini</h4>
                             </div>
                             <div class="card-body">
-                                42
+                                {{ auth()->user()->rsvpCountForCurrentPeriod() }}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
-                        <div class="card-icon bg-warning">
-                            <i class="fa fa-spinner fa-2x text-white"></i>
+                        <div class="card-icon bg-success">
+                            <i class="fa fa-calendar fa-2x text-white"></i>
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Sedang diproses</h4>
+                                <h4>Total Kegiatan Yang diikuti Keseluruhan</h4>
                             </div>
                             <div class="card-body">
-                                1,201
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="card card-statistic-1">
-                        <div class="card-icon bg-danger">
-                            <i class="fa fa-file-invoice-dollar fa-2x text-white"></i>
-                        </div>
-                        <div class="card-wrap">
-                            <div class="card-header">
-                                <h4>Belum dibayar</h4>
-                            </div>
-                            <div class="card-body">
-                                47
+                                {{ $rsvp_count }}
                             </div>
                         </div>
                     </div>
@@ -98,7 +83,7 @@
             </div>
             <div class="row justify-center">
                 @forelse ($events as $item)
-                <div class="col-md-3">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12 m-2">
                     <a href="{{route('show.acara', $item->id)}}">
                         <div class="card card-statistic-1 card-square">
                             <div class="bg-primary d-flex justify-content-center align-items-center card-icon-circle mt-5">

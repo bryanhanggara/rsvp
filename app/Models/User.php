@@ -69,4 +69,36 @@ class User extends Authenticatable
     {
         return $this->hasMany(UserPoint::class, 'user_id');
     }
+
+    public function pointHistories()
+    {
+        return $this->hasMany(UserPointHistory::class);
+    }
+
+    public function rsvpCountForCurrentPeriod()
+    {
+        $currentPeriod = Event::getCurrentPeriod();
+
+        return $this->rsvp()
+                    ->whereHas('event', function ($query) use ($currentPeriod) {
+                        $query->where('priode', $currentPeriod);
+                    })
+                    ->count();
+    }
+
+    public function totalPointsForCurrentPeriod()
+    {
+        $currentPeriod = Event::getCurrentPeriod();
+
+        return $this->hasOne(UserPoint::class, 'user_id')
+                    ->where('periode', $currentPeriod)
+                    ->value('point') ?? 0;
+    }
+
+
+    public function approvedRsvps()
+    {
+        return $this->hasMany(Rsvp::class)->where('status', 'APPROVED');
+    }
+
 }
