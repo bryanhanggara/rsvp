@@ -35,4 +35,20 @@ class UserPointHistory extends Model
     {
         return $this->belongsTo(UserPoint::class);
     }
+
+    public static function getTotalPointsByMonth($userId, $month = null, $year = null)
+    {
+        $query = self::where('user_id', $userId);
+
+        // Filter berdasarkan bulan dan tahun jika ada
+        if ($month) {
+            $query->whereMonth('created_at', $month);
+        }
+        if ($year) {
+            $query->whereYear('created_at', $year);
+        }
+
+        return $query->sum('point');
+    }
+
 }
