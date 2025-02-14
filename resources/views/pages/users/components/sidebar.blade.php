@@ -1,10 +1,10 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
-        <div class="sidebar-brand">
-            <a href="index.html">HangsPos</a>
+        <div class="sidebar-brand p-5 mb-5">
+            <img src="{{url('img/avatar/logo_kse.jpeg')}}" alt="LOGO" width="100">
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
-            <a href="index.html">St</a>
+            <a href="index.html">KSE</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
@@ -29,9 +29,9 @@
             </li> --}}
         </ul>
         <div class="hide-sidebar-mini mt-4 mb-4 p-3">
-            <a href="https://getstisla.com/docs"
-                class="btn btn-primary btn-lg btn-block btn-icon-split">
-                <i class="fas fa-rocket"></i> Documentation
+            <a href="#"
+                class="btn btn-warning btn-lg btn-block btn-icon-split">
+                <i class="fas fa-rocket"></i> Donate
             </a>
         </div>
     </aside>

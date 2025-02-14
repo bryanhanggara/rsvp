@@ -58,6 +58,19 @@
                                 @enderror
                             </div>
                             <div class="form-group col-3">
+                                <label>Kategori</label>
+                                <select name="category"  class="form-control @error('category') is-invalid @enderror">
+                                    <option value="">Pilih Kategori</option>
+                                    <option value="akumulasi">Akumulasi</option>
+                                    <option value="tambahan">Tambahan</option>
+                                </select>
+                                @error('category')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-3">
                                 <label>Tanggal</label>
                                 <input type="date"
                                     class="form-control @error('date')

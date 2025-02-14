@@ -6,7 +6,7 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no"
         name="viewport">
     <title>@yield('title') &mdash; Beasiswa KSE Unsri</title>
-    @livewireStyles
+  
     <!-- General CSS Files -->
     <link rel="stylesheet"
         href="{{ asset('library/bootstrap/dist/css/bootstrap.min.css') }}">
@@ -16,6 +16,7 @@
         crossorigin="anonymous"
         referrerpolicy="no-referrer" />
 
+    <link rel="icon" href="{{url('img/avatar/logo_kse.jpeg')}}">
     @stack('style')
 
     <!-- Template CSS -->
@@ -61,7 +62,7 @@
         </div>
     </div>
 
-    @livewireScripts
+   
     <!-- General JS Scripts -->
     <script src="{{ asset('library/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('library/popper.js/dist/umd/popper.js') }}"></script>

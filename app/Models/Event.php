@@ -21,7 +21,8 @@ class Event extends Model
       'description',
       'date',
       'point',
-      'priode'
+      'priode',
+      'category'
     ];
 
     public function rsvp()
@@ -49,10 +50,10 @@ class Event extends Model
         return self::where('priode', $currentPeriod)->count();
     }
 
-    // App\Models\Event.php
     public static function getEventPointsByMonth($month = null, $year = null)
     {
-        $query = self::query();
+        $query = self::query()
+                ->where('category', 'akumulasi'); 
 
         // Filter berdasarkan bulan dan tahun jika ada
         if ($month) {

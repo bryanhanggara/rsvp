@@ -1,6 +1,8 @@
 @extends('pages.users.layouts.app')
 
-@section('title', 'Detail Acara {{$event->name}}')
+@section('title')
+    Riwayat Kegiatan
+@endsection
 
 @push('style')
     <!-- CSS Libraries -->

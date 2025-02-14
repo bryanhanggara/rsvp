@@ -62,6 +62,7 @@
                                         <tr>
                                             <th>Nama</th>
                                             <th>Priode</th>
+                                            <th>Kategori</th>
                                             <th>Deskripsi</th>
                                             <th>Poin</th>
                                             <th>Waktu</th>
@@ -75,6 +76,7 @@
                                         <tr>
                                              <td>{{$item->name}}</td>
                                              <td>{{$item->priode}}</td>
+                                             <td>{{$item->category}}</td>
                                              <td>{{strip_tags($item->description)}}</td>
                                              <td>
                                                {{$item->point}}

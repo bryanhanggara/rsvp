@@ -20,6 +20,7 @@ class AkumulasiController extends Controller
         ->groupBy('bulan', 'tahun')
         ->orderBy('tahun', 'desc')
         ->orderBy('bulan', 'desc')
+        ->where('category', 'akumulasi')
         ->get();
 
         // Nama bulan untuk ditampilkan di view

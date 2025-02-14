@@ -46,6 +46,7 @@ class EventController extends Controller
             'date' => 'required',
             'point' => 'required',
             'priode' => 'required',
+            'category' => 'required',
         ]);
 
         $periode = Event::getCurrentPeriod();
@@ -56,6 +57,7 @@ class EventController extends Controller
             'date' => $request->date,
             'point' => $request->point,
             'priode' => $periode, // Otomatis ambil periode
+            'category' => $request->category
         ]);
 
         Alert::success('Yeay', 'Acara Sudah Dibuat');
