@@ -27,10 +27,10 @@
                 <a href="{{route('admin.pointsByMonth')}}"
                     class="nav-link"><i class="fa fa-coins"></i><span>Point</span></a>
             </li>
-            {{-- <li class="nav-item">
-                <a href="{{route('package.index')}}"
-                    class="nav-link"><i class="fa fa-tshirt"></i><span>Paket Laundrian</span></a>
-            </li> --}}
+            <li class="nav-item">
+                <a href="{{route('admin.total.point.event.perbulan')}}"
+                    class="nav-link"><i class="fa fa-calculator"></i><span>Akumulasi Point</span></a>
+            </li>
         </ul>
         <div class="hide-sidebar-mini mt-4 mb-4 p-3">
             <a href="https://getstisla.com/docs"

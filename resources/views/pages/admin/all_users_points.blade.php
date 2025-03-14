@@ -32,62 +32,67 @@
 
         <div class="section-body">
             <div class="card">
-                <div class="card-body">
-                    <h2>Total Poin Per Bulan</h2>
+               <div class="card-body">
+                    <div class="container-fluid mt-5">
+                        <h2>Jumlah Point User per Bulan</h2>
 
-                        <!-- Form Filter -->
-                        <div class="card shadow-sm p-3 bg-primary">
-                            <!-- Form Filter -->
-                            <form method="GET" action="{{ route('admin.pointsByMonth') }}" class="form-inline">
-                                <label>Pilih Periode:</label>
-                                <select name="periode" class="form-control mx-2">
-                                    @foreach ($availablePeriods as $p)
-                                        <option value="{{ $p }}" {{ $periode == $p ? 'selected' : '' }}>{{ $p }}</option>
-                                    @endforeach
-                                </select>
-
-                                <label>Pilih Bulan:</label>
-                                <select name="bulan" class="form-control mx-2">
-                                    <option value="">Semua Bulan</option>
-                                    @for ($m = 1; $m <= 12; $m++)
-                                        <option value="{{ $m }}" {{ $bulan == $m ? 'selected' : '' }}>
-                                            {{ DateTime::createFromFormat('!m', $m)->format('F') }}
-                                        </option>
-                                    @endfor
-                                </select>
-
-                                <button class="btn btn-success ml-2" type="submit">Filter</button>
-                            </form>
-                        </div>
-
-                        <!-- Tabel Data -->
+                        <form method="GET" action="{{ route('admin.pointsByMonth') }}">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <select name="month" class="form-control">
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}" {{ $month == $i ? 'selected' : '' }}>
+                                                {{ date('F', mktime(0, 0, 0, $i, 1)) }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select name="year" class="form-control">
+                                        @for ($y = date('Y'); $y >= date('Y') - 5; $y--)
+                                            <option value="{{ $y }}" {{ $year == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                        @endfor
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary">Filter</button>
+                                </div>
+                            </div>
+                        </form>
+                    
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>User</th>
-                                    <th>Bulan</th>
                                     <th>Total Point</th>
+                                    <th>Minimum Point</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($users as $user)
+                                @foreach ($userPoints as $point)
+                                    @php
+                                        $isBelowMinimum = $point->total_points < ($eventPoints->minimum_point ?? 0);
+                                    @endphp
                                     <tr>
-                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $point->user->name }}</td>
+                                        <td class="{{ $isBelowMinimum ? 'text-danger' : '' }}">
+                                            {{ $point->total_points }}
+                                        </td>
+                                        <td>{{ $eventPoints->minimum_point ?? 0 }}</td>
                                         <td>
-                                            @if($bulan)
-                                                {{ DateTime::createFromFormat('!m', $bulan)->format('F') }}
+                                            @if ($isBelowMinimum)
+                                                <span class="badge bg-danger text-white p-3">Kurang</span>
                                             @else
-                                                Semua Bulan
+                                                <span class="badge bg-success text-white p-3">Cukup</span>
                                             @endif
                                         </td>
-                                        <td>{{ $user->total_point }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        
-                        
-                </div>
+                    </div>
+               </div>
             </div>
         </div>
     </section>

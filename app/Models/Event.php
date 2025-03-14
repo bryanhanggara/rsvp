@@ -49,4 +49,31 @@ class Event extends Model
         return self::where('priode', $currentPeriod)->count();
     }
 
+    // App\Models\Event.php
+    public static function getEventPointsByMonth($month = null, $year = null)
+    {
+        $query = self::query();
+
+        // Filter berdasarkan bulan dan tahun jika ada
+        if ($month) {
+            $query->whereMonth('created_at', $month);
+        }
+        if ($year) {
+            $query->whereYear('created_at', $year);
+        }
+
+        // Grouping berdasarkan bulan dan tahun
+        return $query->selectRaw('
+                MONTH(created_at) as bulan,
+                YEAR(created_at) as tahun,
+                SUM(point) as total_point,
+                SUM(point) * 0.5 as minimum_point
+            ')
+            ->groupBy('bulan', 'tahun')
+            ->orderBy('tahun', 'desc')
+            ->orderBy('bulan', 'desc')
+            ->first();
+    }
+
+
 }

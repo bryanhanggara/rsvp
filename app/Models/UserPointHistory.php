@@ -51,4 +51,24 @@ class UserPointHistory extends Model
         return $query->sum('point');
     }
 
+    public static function getTotalPointsByMonthForAllUsers($month = null, $year = null)
+    {
+        $query = self::query();
+
+        // Filter berdasarkan bulan dan tahun jika ada
+        if ($month) {
+            $query->whereMonth('created_at', $month);
+        }
+        if ($year) {
+            $query->whereYear('created_at', $year);
+        }
+
+        // Grouping berdasarkan user dan bulan
+        return $query->selectRaw('user_id, SUM(point) as total_points, DATE_FORMAT(created_at, "%Y-%m") as month')
+                    ->groupBy('user_id', 'month')
+                    ->orderBy('month', 'desc')
+                    ->get();
+    }
+
+
 }

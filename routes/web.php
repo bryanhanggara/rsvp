@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\RsvpController;
 use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\AkumulasiController;
 use App\Http\Controllers\User\HomeController as HomeUserController;
 
 // Route::get('/', function () {
@@ -20,7 +21,7 @@ Route::prefix('admin')->middleware('auth','isAdmin')->group(function(){
     Route::post('/event/{eventId}/deduct-points/{userId}', [RsvpController::class, 'deductPointsForNonRsvp'])->name('event.deductPoints');
     Route::get('/ranking', [HomeController::class, 'rankingBeswan'])->name('ranking.index');
     Route::get('/points', [HomeController::class, 'pointsByMonth'])->name('admin.pointsByMonth');
-
+    Route::get('/admin/total-point-event-per-bulan', [AkumulasiController::class, 'totalPointEventPerBulan'])->name('admin.total.point.event.perbulan');
 
 });
 

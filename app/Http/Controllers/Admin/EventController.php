@@ -16,9 +16,11 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-        $selectedPeriod = $request->input('priode', Event::getCurrentPeriod());
-
-        $availablePeriods = Event::select('priode')->distinct()->orderBy('priode', 'desc')->get();
+        $availablePeriods = Event::pluck('priode')->unique()->sort();
+        
+        // Ambil periode dari request, kalau kosong pakai periode saat ini
+        $currentPeriod = Event::getCurrentPeriod();
+        $selectedPeriod = $request->priode ?? $currentPeriod;
 
         $events = Event::where('priode', $selectedPeriod)->get();
 

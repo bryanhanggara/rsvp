@@ -47,8 +47,8 @@
                                 <label for="priode">Filter Priode:</label>
                                 <select name="priode" id="priode" onchange="this.form.submit()" class="form-control">
                                     @foreach ($availablePeriods as $period)
-                                        <option value="{{ $period->priode }}" {{ $period->priode == $selectedPeriod ? 'selected' : '' }}>
-                                            {{ $period->priode }}
+                                        <option value="{{ $period }}" {{ $period == $selectedPeriod ? 'selected' : '' }}>
+                                            {{ $period}}
                                         </option>
                                     @endforeach
                                 </select>

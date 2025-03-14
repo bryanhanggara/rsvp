@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Models\UserPointHistory;
 use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
@@ -53,35 +54,19 @@ class HomeController extends Controller
 
     public function pointsByMonth(Request $request)
     {
-         // Ambil semua periode yang tersedia dari Event
-        $availablePeriods = Event::select('priode')->distinct()->pluck('priode');
+        // Ambil bulan dan tahun dari request (default bulan dan tahun sekarang)
+        $month = $request->input('month', date('m'));
+        $year = $request->input('year', date('Y'));
 
-        // Periode dan bulan dipilih user
-        $periode = $request->periode ?? $availablePeriods->first();
-        $bulan = $request->bulan;
+        // Dapatkan data total poin per bulan untuk semua user
+        $userPoints = UserPointHistory::getTotalPointsByMonthForAllUsers($month, $year);
 
-        // Ambil data user dan total poin dari RSVP
-        $users = User::with(['approvedRsvps' => function ($query) use ($periode, $bulan) {
-            $query->whereHas('event', function ($query) use ($periode) {
-                    $query->where('priode', $periode);
-                })
-                ->when($bulan, function ($query) use ($bulan) {
-                    $query->whereMonth('created_at', $bulan);
-                })
-                ->with('event')
-                ->get();
-        }])->get();
+        // Dapatkan akumulasi point dari event per bulan
+        $eventPoints = Event::getEventPointsByMonth($month, $year);
 
-        // Hitung total poin per user
-        $users->map(function ($user) {
-            $user->total_point = $user->approvedRsvps->sum(function ($rsvp) {
-                return $rsvp->event->point;
-            });
-            return $user;
-        });
-
-        return view('pages.admin.all_users_points', compact('users', 'availablePeriods', 'periode', 'bulan'));
+        return view('pages.admin.all_users_points', compact('userPoints', 'month', 'year', 'eventPoints'));
     }
+
 
 
 }
