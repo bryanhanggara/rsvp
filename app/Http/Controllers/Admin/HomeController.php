@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use App\Models\UserPointHistory;
+use App\Exports\UserPointsExport;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HomeController extends Controller
 {
@@ -67,6 +69,13 @@ class HomeController extends Controller
         return view('pages.admin.all_users_points', compact('userPoints', 'month', 'year', 'eventPoints'));
     }
 
+    public function exportPoints(Request $request)
+    {
+        $month = $request->input('month', date('m'));
+        $year = $request->input('year', date('Y'));
 
+        $fileName = 'user_points_' . $month . '_' . $year . '.xlsx';
+        return Excel::download(new UserPointsExport($month, $year), $fileName);
+    }
 
 }

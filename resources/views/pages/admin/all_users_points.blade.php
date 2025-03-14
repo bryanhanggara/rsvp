@@ -21,10 +21,10 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Acara</h1>
+            <h1>Jumlah Point User per Bulan</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">Acara
+                <div class="breadcrumb-item">Jumlah Point User per Bulan
 
                 </div>
             </div>
@@ -34,8 +34,6 @@
             <div class="card">
                <div class="card-body">
                     <div class="container-fluid mt-5">
-                        <h2>Jumlah Point User per Bulan</h2>
-
                         <form method="GET" action="{{ route('admin.pointsByMonth') }}">
                             <div class="row mb-3">
                                 <div class="col-md-3">
@@ -59,7 +57,12 @@
                                 </div>
                             </div>
                         </form>
-                    
+                        
+                        <!-- Tombol Export XLSX -->
+                        <a href="{{ route('admin.exportPoints', ['month' => $month, 'year' => $year]) }}" class="btn btn-success mb-3">
+                            <i class="fas fa-file-excel"></i> Export XLSX
+                        </a>
+
                         <table class="table table-bordered">
                             <thead>
                                 <tr>

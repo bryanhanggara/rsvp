@@ -21,24 +21,17 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Acara</h1>
+            <h1>Ranking Beswan Terbanyak</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                <div class="breadcrumb-item">Acara
+                <div class="breadcrumb-item">Ranking Beswan Terbanyak
 
                 </div>
             </div>
         </div>
 
         <div class="section-body">
-            <div class="card p-5">
-                
-            
-                <div class="card-header">
-                    <h2 class="mb-4">Ranking Beswan Terbanyak</h2>
-                    
-                </div>
-            
+            <div class="card p-5">        
                 <div class="card-body">
                   <!-- Filter Periode -->
                 <form method="GET" action="{{ route('ranking.index') }}">

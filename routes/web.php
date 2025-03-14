@@ -22,7 +22,7 @@ Route::prefix('admin')->middleware('auth','isAdmin')->group(function(){
     Route::get('/ranking', [HomeController::class, 'rankingBeswan'])->name('ranking.index');
     Route::get('/points', [HomeController::class, 'pointsByMonth'])->name('admin.pointsByMonth');
     Route::get('/admin/total-point-event-per-bulan', [AkumulasiController::class, 'totalPointEventPerBulan'])->name('admin.total.point.event.perbulan');
-
+    Route::get('/admin/export-points', [HomeController::class, 'exportPoints'])->name('admin.exportPoints');
 });
 
 Route::group(['middleware' => 'auth'], function () {
