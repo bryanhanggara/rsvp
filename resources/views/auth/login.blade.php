@@ -70,6 +70,8 @@
                         tabindex="4">
                         Login
                     </button>
+                    <br>
+                    <a href="{{route('password.request')}}" class="mb-2">Lupa Password?</a>
                 </div>
             </form>
         
