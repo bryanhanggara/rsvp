@@ -25,7 +25,7 @@ Route::prefix('admin')->middleware('auth','isAdmin')->group(function(){
     Route::get('/admin/export-points', [HomeController::class, 'exportPoints'])->name('admin.exportPoints');
 });
 
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/', [HomeUserController::class, 'index'])->name('dashboard.user');
     Route::get('/detail-acara/{eventId}', [HomeUserController::class, 'show'])->name('show.acara');
     Route::get('/riwayat-rsvp', [HomeUserController::class, 'historyRsvp'])->name('show.history');

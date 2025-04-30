@@ -35,9 +35,10 @@ class HomeController extends Controller
                                 $query->where('periode', $selectedPeriod);
                             },
                             'rsvp' => function ($query) use ($selectedPeriod) {
-                                $query->whereHas('event', function ($q) use ($selectedPeriod) {
-                                    $q->where('priode', $selectedPeriod);
-                                });
+                                $query->where('status', 'approved') // hanya RSVP yang approved
+                                      ->whereHas('event', function ($q) use ($selectedPeriod) {
+                                          $q->where('priode', $selectedPeriod);
+                                      });
                             }
                         ])
                         ->withSum(['points as total_points' => function ($query) use ($selectedPeriod) {
