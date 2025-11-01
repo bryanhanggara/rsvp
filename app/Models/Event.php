@@ -69,18 +69,18 @@ class Event extends Model
         $query = self::query()
                 ->where('category', 'akumulasi'); 
 
-        // Filter berdasarkan bulan dan tahun jika ada
+        // Filter berdasarkan bulan dan tahun event date, bukan tanggal event dibuat
         if ($month) {
-            $query->whereMonth('created_at', $month);
+            $query->whereMonth('date', $month);
         }
         if ($year) {
-            $query->whereYear('created_at', $year);
+            $query->whereYear('date', $year);
         }
 
         // Grouping berdasarkan bulan dan tahun
         return $query->selectRaw('
-                MONTH(created_at) as bulan,
-                YEAR(created_at) as tahun,
+                MONTH(date) as bulan,
+                YEAR(date) as tahun,
                 SUM(point) as total_point,
                 SUM(point) * 0.5 as minimum_point
             ')

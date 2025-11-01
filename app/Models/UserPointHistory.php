@@ -53,21 +53,45 @@ class UserPointHistory extends Model
 
     public static function getTotalPointsByMonthForAllUsers($month = null, $year = null)
     {
-        $query = self::query();
+        // Query dari RSVP yang disetujui untuk event di bulan/tahun yang dipilih
+        // Kemudian ambil history poin dari UserPointHistory yang terkait
+        
+        $query = \DB::table('rsvps')
+            ->join('events', 'rsvps.event_id', '=', 'events.id')
+            ->join('user_point_histories', function($join) {
+                $join->on('user_point_histories.user_id', '=', 'rsvps.user_id')
+                     ->whereRaw("user_point_histories.description LIKE CONCAT('%', events.name, '%')");
+            })
+            ->whereIn('rsvps.status', ['APPROVED', 'ABSENT']); // Include both approved and absent
 
-        // Filter berdasarkan bulan dan tahun jika ada
+        // Filter berdasarkan bulan dan tahun event, bukan tanggal history dibuat
         if ($month) {
-            $query->whereMonth('created_at', $month);
+            $query->whereMonth('events.date', $month);
         }
         if ($year) {
-            $query->whereYear('created_at', $year);
+            $query->whereYear('events.date', $year);
         }
 
-        // Grouping berdasarkan user dan bulan
-        return $query->selectRaw('user_id, SUM(point) as total_points, DATE_FORMAT(created_at, "%Y-%m") as month')
-                    ->groupBy('user_id', 'month')
-                    ->orderBy('month', 'desc')
+        // Grouping berdasarkan user
+        $results = $query->selectRaw('user_point_histories.user_id, SUM(user_point_histories.point) as total_points')
+                    ->groupBy('user_point_histories.user_id')
                     ->get();
+
+        // Eager load users untuk performa lebih baik
+        $userIds = $results->pluck('user_id')->unique();
+        $users = User::whereIn('id', $userIds)->get()->keyBy('id');
+
+        // Convert to collection of model instances with user relationship
+        $histories = collect();
+        foreach ($results as $result) {
+            $history = new self();
+            $history->user_id = $result->user_id;
+            $history->total_points = $result->total_points;
+            $history->setRelation('user', $users->get($result->user_id));
+            $histories->push($history);
+        }
+
+        return $histories;
     }
 
 
