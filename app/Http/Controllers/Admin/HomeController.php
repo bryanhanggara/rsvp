@@ -35,7 +35,7 @@ class HomeController extends Controller
                                 $query->where('periode', $selectedPeriod);
                             },
                             'rsvp' => function ($query) use ($selectedPeriod) {
-                                $query->where('status', 'approved') // hanya RSVP yang approved
+                                $query->where('status', 'APPROVED') // hanya RSVP yang approved
                                       ->whereHas('event', function ($q) use ($selectedPeriod) {
                                           $q->where('priode', $selectedPeriod);
                                       });
@@ -53,6 +53,43 @@ class HomeController extends Controller
                         ->get();
 
         return view('pages.admin.ranking', compact('ranking', 'selectedPeriod','availablePeriods'));
+    }
+
+    public function monthlyLeaderboard(Request $request)
+    {
+        $month = (int) $request->input('month', date('m'));
+        $year = (int) $request->input('year', date('Y'));
+
+        // Ambil user yang memiliki RSVP APPROVED pada bulan/tahun event yang dipilih,
+        // sekaligus eager-load event untuk breakdown
+        $users = User::whereHas('rsvp', function ($query) use ($month, $year) {
+                            $query->where('status', 'APPROVED')
+                                  ->whereHas('event', function ($q) use ($month, $year) {
+                                      $q->whereMonth('date', $month)
+                                        ->whereYear('date', $year);
+                                  });
+                        })
+                        ->with(['rsvp' => function ($query) use ($month, $year) {
+                            $query->where('status', 'APPROVED')
+                                  ->whereHas('event', function ($q) use ($month, $year) {
+                                      $q->whereMonth('date', $month)
+                                        ->whereYear('date', $year);
+                                  })
+                                  ->with('event');
+                        }])
+                        ->get();
+
+        // Hitung total point per user berdasarkan point event-event yang dihadiri
+        $ranking = $users->map(function ($user) {
+                            $user->total_points = $user->rsvp->sum(function ($rsvp) {
+                                return (float) ($rsvp->event->point ?? 0);
+                            });
+                            return $user;
+                        })
+                        ->sortByDesc('total_points')
+                        ->values();
+
+        return view('pages.admin.leaderboard_month', compact('ranking', 'month', 'year'));
     }
 
     public function pointsByMonth(Request $request)

@@ -20,6 +20,7 @@ Route::prefix('admin')->middleware('auth','isAdmin')->group(function(){
     Route::put('/rsvp/bulkUpdateStatus', [RsvpController::class, 'bulkUpdateStatus'])->name('rsvp.bulkUpdateStatus');
     Route::post('/event/{eventId}/deduct-points/{userId}', [RsvpController::class, 'deductPointsForNonRsvp'])->name('event.deductPoints');
     Route::get('/ranking', [HomeController::class, 'rankingBeswan'])->name('ranking.index');
+    Route::get('/leaderboard-month', [HomeController::class, 'monthlyLeaderboard'])->name('admin.leaderboard.month');
     Route::get('/points', [HomeController::class, 'pointsByMonth'])->name('admin.pointsByMonth');
     Route::get('/admin/total-point-event-per-bulan', [AkumulasiController::class, 'totalPointEventPerBulan'])->name('admin.total.point.event.perbulan');
     Route::get('/admin/export-points', [HomeController::class, 'exportPoints'])->name('admin.exportPoints');
@@ -29,6 +30,8 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/', [HomeUserController::class, 'index'])->name('dashboard.user');
     Route::get('/detail-acara/{eventId}', [HomeUserController::class, 'show'])->name('show.acara');
     Route::get('/riwayat-rsvp', [HomeUserController::class, 'historyRsvp'])->name('show.history');
+    Route::get('/leaderboard-periode', [HomeUserController::class, 'leaderboardPeriode'])->name('user.leaderboard.periode');
+    Route::get('/leaderboard-month', [HomeUserController::class, 'leaderboardMonth'])->name('user.leaderboard.month');
     Route::post('/rsvp', [RsvpController::class, 'store'])->name('rsvp');
 });
 

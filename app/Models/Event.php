@@ -50,6 +50,20 @@ class Event extends Model
         return self::where('priode', $currentPeriod)->count();
     }
 
+    public static function getPeriodForDate(string $dateString)
+    {
+        $timestamp = strtotime($dateString);
+        $month = (int) date('n', $timestamp);
+        $year = (int) date('Y', $timestamp);
+
+        if ($month >= 1 && $month <= 2) return "Januari - Februari $year";
+        if ($month >= 3 && $month <= 4) return "Maret - April $year";
+        if ($month >= 5 && $month <= 6) return "Mei - Juni $year";
+        if ($month >= 7 && $month <= 8) return "Juli - Agustus $year";
+        if ($month >= 9 && $month <= 10) return "September - Oktober $year";
+        return "November - Desember $year";
+    }
+
     public static function getEventPointsByMonth($month = null, $year = null)
     {
         $query = self::query()

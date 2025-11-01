@@ -19,6 +19,14 @@
                 <a href="{{route('show.history')}}"
                     class="nav-link"><i class="fas fa-clock"></i><span>Riwayat RSPV</span></a>
             </li>
+            <li class="nav-item">
+                <a href="{{ route('user.leaderboard.periode') }}"
+                    class="nav-link"><i class="fas fa-trophy"></i><span>Leaderboard Periode</span></a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('user.leaderboard.month') }}"
+                    class="nav-link"><i class="fas fa-calendar-alt"></i><span>Leaderboard Bulanan</span></a>
+            </li>
             {{-- <li class="nav-item">
                 <a href="{{route('package.index')}}"
                     class="nav-link"><i class="fa fa-shopping-cart"></i><span>Riwayat</span></a>

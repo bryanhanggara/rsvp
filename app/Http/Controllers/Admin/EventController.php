@@ -49,14 +49,16 @@ class EventController extends Controller
             'category' => 'required',
         ]);
 
-        $periode = Event::getCurrentPeriod();
+        // Tetapkan priode berdasarkan tanggal event yang dipilih,
+        // supaya RSVP selalu dihitung ke priode yang benar meskipun dibuat belakangan
+        $periode = Event::getPeriodForDate($request->date);
 
          Event::create([
             'name' => $request->name,
             'description' => $request->description,
             'date' => $request->date,
             'point' => $request->point,
-            'priode' => $periode, // Otomatis ambil periode
+            'priode' => $periode,
             'category' => $request->category
         ]);
 
