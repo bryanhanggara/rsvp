@@ -48,7 +48,7 @@ class UserPointsExport implements FromCollection, WithHeadings, WithMapping
         // Tampilkan semua user yang mungkin belum punya RSVP untuk beberapa event
         $userIds = \DB::table('rsvps')
             ->join('events', 'rsvps.event_id', '=', 'events.id')
-            ->whereIn('rsvps.status', ['APPROVED', 'ABSENT'])
+            ->whereIn('rsvps.status', ['APPROVED', 'ABSENT', 'HALF_TIME'])
             ->whereMonth('events.date', $this->month)
             ->whereYear('events.date', $this->year)
             ->pluck('rsvps.user_id')
@@ -77,7 +77,7 @@ class UserPointsExport implements FromCollection, WithHeadings, WithMapping
             })
             ->whereIn('rsvps.user_id', $userIds)
             ->whereIn('rsvps.event_id', $eventIds)
-            ->whereIn('rsvps.status', ['APPROVED', 'ABSENT'])
+            ->whereIn('rsvps.status', ['APPROVED', 'ABSENT', 'HALF_TIME'])
             ->select(
                 'rsvps.user_id',
                 'rsvps.event_id',

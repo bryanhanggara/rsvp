@@ -89,8 +89,9 @@
                                         <td>
                                             <span class="badge 
                                                 {{ $item->status == 'PENDING' ? 'badge-warning' : 
-                                                   ($item->status == 'APPROVED' ? 'badge-success' : 'badge-danger') }}">
-                                                {{ $item->status }}
+                                                   ($item->status == 'APPROVED' ? 'badge-success' : 
+                                                   ($item->status == 'HALF_TIME' ? 'badge-info' : 'badge-danger')) }}">
+                                                {{ $item->status == 'HALF_TIME' ? 'Half-Time' : $item->status }}
                                             </span>
                                         </td>
                                         <td>
@@ -105,6 +106,7 @@
                                                 <select name="status" class="form-control">
                                                     <option value="PENDING" {{ $item->status == 'PENDING' ? 'selected' : '' }}>PENDING</option>
                                                     <option value="APPROVED" {{ $item->status == 'APPROVED' ? 'selected' : '' }}>APPROVED</option>
+                                                    <option value="HALF_TIME" {{ $item->status == 'HALF_TIME' ? 'selected' : '' }}>Half-Time</option>
                                                     <option value="ABSENT" {{ $item->status == 'ABSENT' ? 'selected' : '' }}>ABSENT</option>
                                                     <option value="REJECTED" {{ $item->status == 'REJECTED' ? 'selected' : '' }}>REJECTED</option>
                                                 </select>
@@ -125,6 +127,7 @@
                                 <option value="" disabled selected>Pilih Status</option>
                                 <option value="PENDING">PENDING</option>
                                 <option value="APPROVED">APPROVED</option>
+                                <option value="HALF_TIME">Half-Time</option>
                                 <option value="ABSENT">ABSENT</option>
                                 <option value="REJECTED">REJECTED</option>
                             </select>

@@ -55,7 +55,7 @@ class HomeController extends Controller
         $selectedPeriod = $request->periode ?? $currentPeriod;
 
         $ranking = User::with(['rsvp' => function ($query) use ($selectedPeriod) {
-                                $query->where('status', 'APPROVED')
+                                $query->whereIn('status', ['APPROVED', 'HALF_TIME'])
                                       ->whereHas('event', function ($q) use ($selectedPeriod) {
                                           $q->where('priode', $selectedPeriod);
                                       })
@@ -64,7 +64,8 @@ class HomeController extends Controller
                             ->get()
                             ->map(function ($user) {
                                 $user->total_points = $user->rsvp->sum(function ($rsvp) {
-                                    return (float) ($rsvp->event->point ?? 0);
+                                    $point = (float) ($rsvp->event->point ?? 0);
+                                    return $rsvp->status === 'HALF_TIME' ? $point / 2 : $point;
                                 });
                                 return $user;
                             })
@@ -80,14 +81,14 @@ class HomeController extends Controller
         $year = (int) $request->input('year', date('Y'));
 
         $users = User::whereHas('rsvp', function ($query) use ($month, $year) {
-                            $query->where('status', 'APPROVED')
+                            $query->whereIn('status', ['APPROVED', 'HALF_TIME'])
                                   ->whereHas('event', function ($q) use ($month, $year) {
                                       $q->whereMonth('date', $month)
                                         ->whereYear('date', $year);
                                   });
                         })
                         ->with(['rsvp' => function ($query) use ($month, $year) {
-                            $query->where('status', 'APPROVED')
+                            $query->whereIn('status', ['APPROVED', 'HALF_TIME'])
                                   ->whereHas('event', function ($q) use ($month, $year) {
                                       $q->whereMonth('date', $month)
                                         ->whereYear('date', $year);
@@ -98,7 +99,8 @@ class HomeController extends Controller
 
         $ranking = $users->map(function ($user) {
                             $user->total_points = $user->rsvp->sum(function ($rsvp) {
-                                return (float) ($rsvp->event->point ?? 0);
+                                $point = (float) ($rsvp->event->point ?? 0);
+                                return $rsvp->status === 'HALF_TIME' ? $point / 2 : $point;
                             });
                             return $user;
                         })

@@ -62,7 +62,7 @@ class UserPointHistory extends Model
                 $join->on('user_point_histories.user_id', '=', 'rsvps.user_id')
                      ->whereRaw("user_point_histories.description LIKE CONCAT('%', events.name, '%')");
             })
-            ->whereIn('rsvps.status', ['APPROVED', 'ABSENT']); // Include both approved and absent
+            ->whereIn('rsvps.status', ['APPROVED', 'ABSENT', 'HALF_TIME']);
 
         // Filter berdasarkan bulan dan tahun event, bukan tanggal history dibuat
         if ($month) {

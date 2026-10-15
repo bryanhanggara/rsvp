@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Internal Admin',
             'email' => 'internal@pkseunsri.or.id',
-            'password' => Hash::make('ksejaya2025')
+            'password' => Hash::make('ksejaya2025'),
+            'role' => 'INTERNAL'
         ]);
     }
 }

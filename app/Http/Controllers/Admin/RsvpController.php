@@ -65,6 +65,10 @@ class RsvpController extends Controller
 
     public function updateStatus(Request $request, $id)
     { 
+        $request->validate([
+            'status' => 'required|in:PENDING,REJECTED,APPROVED,ABSENT,HALF_TIME',
+        ]);
+
         $rsvp = Rsvp::findOrFail($id);
         $event = $rsvp->event;
         $user = $rsvp->user;
@@ -79,31 +83,14 @@ class RsvpController extends Controller
             ['point' => 0]
         );
 
-        // Jika status diubah menjadi APPROVED, tambahkan poin
-        if ($request->status === 'APPROVED') {
-        
-            $userPoint->increment('point', $event->point);
+        $history = $this->applyPointsForStatus($userPoint, $event, $request->status);
 
-            // Buat catatan di UserPointHistory
+        if ($history) {
             UserPointHistory::create([
                 'user_id' => $user->id,
                 'user_point_id' => $userPoint->id,
-                'point' => $event->point,
-                'description' => "Menghadiri event: " . $event->name
-            ]);
-        }
-
-        // Jika status diubah menjadi absent, kurangi point
-        elseif ($request->status === 'ABSENT') {
-            // Kurangi point dari UserPoint
-            $userPoint->decrement('point', $event->point/2);
-
-            // Buat catatan di UserPointHistory
-            UserPointHistory::create([
-                'user_id' => $user->id,
-                'user_point_id' => $userPoint->id,
-                'point' => -$event->point/2,
-                'description' => "Tidak hadir di event: " . $event->name
+                'point' => $history['point'],
+                'description' => $history['description'],
             ]);
         }
 
@@ -113,6 +100,11 @@ class RsvpController extends Controller
 
     public function bulkUpdateStatus(Request $request)
     {
+        $request->validate([
+            'status' => 'required|in:PENDING,REJECTED,APPROVED,ABSENT,HALF_TIME',
+            'rsvp_ids' => 'required|array',
+        ]);
+
         $rsvpIds = $request->rsvp_ids;
         $newStatus = $request->status;
 
@@ -144,42 +136,64 @@ class RsvpController extends Controller
                 ['point' => 0]
             );
 
-            // Jika status diubah menjadi APPROVED, tambahkan poin
-            if ($newStatus === 'APPROVED') {
-                $userPoint->increment('point', $event->point);
+            $history = $this->applyPointsForStatus($userPoint, $event, $newStatus);
 
+            if ($history) {
                 $histories[] = [
                     'id' => Str::uuid(),
                     'user_id' => $user->id,
                     'user_point_id' => $userPoint->id,
-                    'point' => $event->point,
-                    'description' => "Menghadiri event: " . $event->name,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-
-            // Jika status diubah menjadi Absent atau tidak hadir, kurangi point
-            elseif ($newStatus === 'ABSENT') {
-                $userPoint->decrement('point', $event->point/2);
-
-                $histories[] = [
-                    'id' => Str::uuid(),
-                    'user_id' => $user->id,
-                    'user_point_id' => $userPoint->id,
-                    'point' => -$event->point/2,
-                    'description' => "Tidak hadir di event: " . $event->name,
+                    'point' => $history['point'],
+                    'description' => $history['description'],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
             }
         }
 
-        // Insert semua history point secara bulk
-        UserPointHistory::insert($histories);
+        if (!empty($histories)) {
+            UserPointHistory::insert($histories);
+        }
 
         Alert::success('Berhasil', 'Status RSVP berhasil diperbarui secara massal');
         return redirect()->back();
+    }
+
+    /**
+     * APPROVED: 100% poin kegiatan
+     * HALF_TIME: 50% poin (panitia tidak hadir hari-H / datang setengah hari / pulang duluan)
+     * ABSENT: 0 poin
+     */
+    private function applyPointsForStatus(UserPoint $userPoint, Event $event, string $status): ?array
+    {
+        $halfPoint = $event->point / 2;
+
+        if ($status === 'APPROVED') {
+            $userPoint->increment('point', $event->point);
+
+            return [
+                'point' => $event->point,
+                'description' => "Menghadiri event: " . $event->name,
+            ];
+        }
+
+        if ($status === 'HALF_TIME') {
+            $userPoint->increment('point', $halfPoint);
+
+            return [
+                'point' => $halfPoint,
+                'description' => "Half-Time event: " . $event->name,
+            ];
+        }
+
+        if ($status === 'ABSENT') {
+            return [
+                'point' => 0,
+                'description' => "Tidak hadir di event: " . $event->name,
+            ];
+        }
+
+        return null;
     }
 
     public function deductPointsForNonRsvp($eventId, $userId)

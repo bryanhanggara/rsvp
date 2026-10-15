@@ -35,7 +35,7 @@ class HomeController extends Controller
                                 $query->where('periode', $selectedPeriod);
                             },
                             'rsvp' => function ($query) use ($selectedPeriod) {
-                                $query->where('status', 'APPROVED') // hanya RSVP yang approved
+                                $query->whereIn('status', ['APPROVED', 'HALF_TIME'])
                                       ->whereHas('event', function ($q) use ($selectedPeriod) {
                                           $q->where('priode', $selectedPeriod);
                                       });
@@ -63,14 +63,14 @@ class HomeController extends Controller
         // Ambil user yang memiliki RSVP APPROVED pada bulan/tahun event yang dipilih,
         // sekaligus eager-load event untuk breakdown
         $users = User::whereHas('rsvp', function ($query) use ($month, $year) {
-                            $query->where('status', 'APPROVED')
+                            $query->whereIn('status', ['APPROVED', 'HALF_TIME'])
                                   ->whereHas('event', function ($q) use ($month, $year) {
                                       $q->whereMonth('date', $month)
                                         ->whereYear('date', $year);
                                   });
                         })
                         ->with(['rsvp' => function ($query) use ($month, $year) {
-                            $query->where('status', 'APPROVED')
+                            $query->whereIn('status', ['APPROVED', 'HALF_TIME'])
                                   ->whereHas('event', function ($q) use ($month, $year) {
                                       $q->whereMonth('date', $month)
                                         ->whereYear('date', $year);
@@ -82,7 +82,8 @@ class HomeController extends Controller
         // Hitung total point per user berdasarkan point event-event yang dihadiri
         $ranking = $users->map(function ($user) {
                             $user->total_points = $user->rsvp->sum(function ($rsvp) {
-                                return (float) ($rsvp->event->point ?? 0);
+                                $point = (float) ($rsvp->event->point ?? 0);
+                                return $rsvp->status === 'HALF_TIME' ? $point / 2 : $point;
                             });
                             return $user;
                         })
